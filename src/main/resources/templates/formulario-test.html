@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Usuario y Suscripción</title>
+</head>
+<body>
+<h2>Crear Usuario y Suscripción</h2>
+
+<form action="/api/test/crear-usuario-suscripcion" method="post">
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="nombre">Nombre:</label><br>
+    <input type="text" id="nombre" name="nombre" required><br><br>
+
+    <label for="apellido">Apellido:</label><br>
+    <input type="text" id="apellido" name="apellido" required><br><br>
+
+    <label for="planNombre">Plan (BASIC, PREMIUM, ENTERPRISE):</label><br>
+    <select id="planNombre" name="planNombre" required>
+        <option value="BASIC">BASIC</option>
+        <option value="PREMIUM">PREMIUM</option>
+        <option value="ENTERPRISE">ENTERPRISE</option>
+    </select><br><br>
+
+    <button type="submit">Crear Usuario y Suscripción</button>
+</form>
+</body>
+</html>
