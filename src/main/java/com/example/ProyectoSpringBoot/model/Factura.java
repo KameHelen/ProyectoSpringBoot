@@ -1,4 +1,5 @@
 package com.example.ProyectoSpringBoot.model;
+
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,7 +20,7 @@ public class Factura {
     @JoinColumn(name = "tipo_pago_id") // Relación con el tipo de pago
     private TipoPago tipoPago;
 
-    private BigDecimal monto;
+    private BigDecimal cantidad;
     private LocalDate fechaEmision;
     private String estado; // PENDIENTE, PAGADA, CANCELADA
 
@@ -48,12 +49,12 @@ public class Factura {
         this.tipoPago = tipoPago;
     }
 
-    public BigDecimal getMonto() {
-        return monto;
+    public BigDecimal getCantidad() {
+        return cantidad;
     }
 
-    public void setMonto(BigDecimal monto) {
-        this.monto = monto;
+    public void setCantidad(BigDecimal cantidad) {
+        this.cantidad = cantidad;
     }
 
     public LocalDate getFechaEmision() {

@@ -1,4 +1,5 @@
 package com.example.ProyectoSpringBoot.model;
+
 import jakarta.persistence.*;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.RelationTargetAuditMode;
@@ -22,11 +23,25 @@ public class Suscripcion {
     @JoinColumn(name = "plan_id")
     private Plan plan;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "metodo_pago_id")
+    private MetodoPago metodoPago;
+
     @Enumerated(EnumType.STRING)
     private EstadoSuscripcion estado; // ACTIVA, CANCELADA, MOROSA
 
     private LocalDate fechaInicio;
     private LocalDate fechaFin;
+
+    // Getters y Setters
+
+    public MetodoPago getMetodoPago() {
+        return metodoPago;
+    }
+
+    public void setMetodoPago(MetodoPago metodoPago) {
+        this.metodoPago = metodoPago;
+    }
 
     // Getters y Setters
 

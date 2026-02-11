@@ -13,9 +13,10 @@ public class Perfil {
 
     private String nombre;
     private String apellido;
+    private String pais; // Add country for tax calculation
+    private String telefono;
 
     // Getters y Setters
-
 
     public Long getId() {
         return id;
@@ -39,5 +40,21 @@ public class Perfil {
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Facturas</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .filter-form {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Listado de Facturas</h1>
+
+    <!-- Feedback Messages -->
+    <div th:if="${param.paymentSuccess}"
+        style="margin-bottom: 20px; padding: 15px; border: 1px solid #28a745; background-color: #d4edda; color: #155724;">
+        Mensualidad pagada correctamente. Se ha extendido tu suscripción 30 días.
+    </div>
+
+    <div th:if="${param.alreadyPaid}"
+        style="margin-bottom: 20px; padding: 15px; border: 1px solid #ffc107; background-color: #fff3cd; color: #856404;">
+        Tu mensualidad ya está pagada. Faltan <span th:text="${param.days}">X</span> días para el próximo pago.
+    </div>
+
+    <div th:if="${param.passwordChanged}"
+        style="margin-bottom: 20px; padding: 15px; border: 1px solid #17a2b8; background-color: #d1ecf1; color: #0c5460;">
+        Contraseña actualizada correctamente.
+    </div>
+
+    <div th:if="${suscripcion != null}"
+        style="margin-bottom: 20px; padding: 15px; border: 1px solid #007bff; background-color: #e9f5ff;">
+        <h2>Tu Plan Actual</h2>
+        <p><strong>Plan:</strong> <span th:text="${suscripcion.plan.nombre}">Basic</span></p>
+        <p><strong>Precio:</strong> <span th:text="${suscripcion.plan.precioMensual}">9.99</span> €/mes</p>
+        <p><strong>Descripción:</strong> <span th:text="${suscripcion.plan.descripcion}">Desc</span></p>
+        <p><strong>Webs:</strong> <span th:text="${suscripcion.plan.numWebs}">1</span> | <strong>Bases de
+                Datos:</strong> <span th:text="${suscripcion.plan.numBasesDatos}">5</span></p>
+
+        <form th:action="@{/facturas/cambiar-plan}" method="post" style="margin-top: 10px;">
+            <label for="planId">Cambiar a:</label>
+            <select name="planId" id="planId">
+                <option th:each="plan : ${planes}" th:value="${plan.id}"
+                    th:text="${plan.nombre} + ' (' + ${plan.precioMensual} + '€)'"
+                    th:selected="${plan.id == suscripcion.plan.id}">
+                    Premium (19.99€)
+                </option>
+            </select>
+            <button type="submit" onclick="return confirm('¿Seguro que quieres cambiar de plan?')">Cambiar Plan</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 20px; padding: 15px; border: 1px solid #28a745; background-color: #d4edda;">
+        <h3>Gestión de Cuenta</h3>
+
+        <form th:action="@{/facturas/pagar}" method="post" style="display:inline-block; margin-right: 20px;">
+            <button type="submit" class="btn-pay"
+                style="background-color: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer;">Pagar
+                Mensualidad</button>
+        </form>
+
+        <br><br>
+
+        <h4>Cambiar Contraseña</h4>
+        <form th:action="@{/facturas/cambiar-password}" method="post">
+            <label>Nueva Contraseña: <input type="password" name="newPassword" required></label>
+            <button type="submit">Actualizar</button>
+        </form>
+    </div>
+
+    <!-- 
+    <div class="filter-form">
+       (Filters removed as table is removed)
+    </div>
+    
+    <table>
+       (Table removed as requested)
+    </table> 
+    -->
+
+</body>
+
+</html>

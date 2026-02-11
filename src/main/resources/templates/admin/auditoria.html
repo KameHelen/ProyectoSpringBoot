@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Panel de Auditoría</title>
+    <style>
+        body {
+            font-family: sans-serif;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h2 {
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Panel de Auditoría</h1>
+
+    <h2>Historial de Usuarios</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Entidad (Estado)</th>
+                <th>Revisión</th>
+                <th>Tipo Modificación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rev : ${usuarioRevisions}">
+                <!-- rev is an array: [Entity, DefaultRevisionEntity, RevisionType] -->
+                <td th:text="${rev[0].email}">user@example.com</td>
+                <td th:text="${rev[1].id} + ' - ' + ${rev[1].revisionDate}">Rev Info</td>
+                <td th:text="${rev[2]}">MOD</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!--
+    <h2>Historial de Suscripciones</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Entidad (Plan - Usuario)</th>
+                <th>Revisión</th>
+                <th>Tipo Modificación</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="rev : ${suscripcionRevisions}">
+                <td
+                    th:text="${rev[0].plan != null ? rev[0].plan.nombre : 'Sin Plan'} + ' - ' + ${rev[0].usuario != null ? rev[0].usuario.email : 'Sin Usuario'}">
+                    Premium - user@example.com</td>
+                <td th:text="${rev[1].id} + ' - ' + ${rev[1].revisionDate}">Rev Info</td>
+                <td th:text="${rev[2]}">ADD</td>
+            </tr>
+        </tbody>
+    </table>
+    -->
+
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Gestión de Usuarios</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .btn-update {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Gestión de Usuarios</h1>
+
+    <div style="margin-bottom: 20px;">
+        <a href="/admin/auditoria">Ver Auditoría</a> |
+        <a href="/facturas">Ver Facturas (Demo)</a>
+        <form th:action="@{/logout}" method="post" style="display:inline; float:right;">
+            <button type="submit">Cerrar Sesión</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>País</th>
+                <th>Plan Actual</th>
+                <th>Estado Suscripción</th>
+                <th>Estado Pago</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td><a th:href="@{/admin/usuarios/{id}(id=${usuario.id})}" th:text="${usuario.id}">1</a></td>
+                <td th:text="${usuario.email}">user@example.com</td>
+                <td th:text="${usuario.rol}">USER</td>
+                <td th:text="${usuario.perfil != null ? usuario.perfil.pais : 'N/A'}">ES</td>
+
+                <!-- Logic to find subscription for this user in the list (simplified for demo) -->
+                <!-- Ideally should be done in controller/service -->
+                <!-- We will use a helper or just iterate subscriptions in controller and pass a DTO -->
+
+                <!-- Quick fix for demo: we can just check if user has subscription via controller login
+                     But since we passed 'suscripciones', let's match them here or simplify. 
+                     Wait, AdminController logic was: findByUsuario(usuario).stream().findFirst()
+                     Let's verify logic in controller or Entity. 
+                     Usuario doesn't have OneToMany Suscripciones mappped yet in this conversation?
+                     Let's check Usuario.java next. If it doesn't, we can add it or doing a quick matching in view is hard.
+                     
+                     For now, let's assume we fix Usuario.java to have mappedBy list, OR we changed AdminController to pass a ViewModel.
+                     
+                     Let's Assume we will ADD the OneToMany to Usuario.java to make this easy.
+                -->
+
+                <td
+                    th:text="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() ? usuario.suscripciones[0].plan.nombre : 'Sin Plan'}">
+                    Basic</td>
+
+                <td
+                    th:text="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() ? usuario.suscripciones[0].estado : 'Sin Suscripción'}">
+                    ACTIVA</td>
+
+                <td>
+                    <span th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">
+                        <span
+                            th:if="${usuario.suscripciones[0].fechaFin != null and usuario.suscripciones[0].fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                            style="color: green; font-weight: bold;">PAGADO</span>
+                        <span
+                            th:unless="${usuario.suscripciones[0].fechaFin != null and usuario.suscripciones[0].fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                            style="color: red; font-weight: bold;">PENDIENTE</span>
+                    </span>
+                    <span th:unless="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">N/A</span>
+                </td>
+
+                <td>
+                    <div th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">
+                        <form th:action="@{/admin/usuarios/{id}/estado(id=${usuario.id})}" method="post">
+                            <select name="estado">
+                                <option th:each="est : ${estados}" th:value="${est}" th:text="${est}"
+                                    th:selected="${est == usuario.suscripciones[0].estado}">
+                                    ACTIVA
+                                </option>
+                            </select>
+                            <button type="submit" class="btn-update">Actualizar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+
+</html>

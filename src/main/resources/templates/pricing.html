@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Elige tu Plan</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f8f9fa;
+        }
+
+        .pricing-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .plan-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            width: 250px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .plan-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .features li {
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Selecciona tu Plan</h1>
+    <p>Elige el plan que mejor se adapte a tus necesidades para comenzar.</p>
+
+    <div class="pricing-container">
+        <div th:each="plan : ${planes}" class="plan-card">
+            <h2 th:text="${plan.nombre}">Basic</h2>
+            <div class="price" th:text="${plan.precioMensual} + '€ / mes'">9.99€ / mes</div>
+            <p th:text="${plan.descripcion}">Descripción del plan</p>
+
+            <ul class="features">
+                <li>🌐 <span th:text="${plan.numWebs}">1</span> Sitios Web</li>
+                <li>💾 <span th:text="${plan.numBasesDatos}">5</span> Bases de Datos</li>
+                <li>✅ Soporte 24/7</li>
+            </ul>
+
+            <form th:action="@{/pricing/select}" method="post">
+                <input type="hidden" name="planId" th:value="${plan.id}">
+                <button type="submit">Seleccionar Plan</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+
+</html>
