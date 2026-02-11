@@ -2,143 +2,308 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Detalles de Usuario</title>
+    <title>Detalles de Usuario | Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4f46e5;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
         body {
-            font-family: sans-serif;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            padding: 2rem;
         }
 
-        .section {
-            margin-bottom: 30px;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
-            background: #fafafa;
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
         }
 
-        h2 {
-            border-bottom: 2px solid #007bff;
-            padding-bottom: 5px;
-            color: #333;
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
         }
 
-        .info-grid {
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            margin-right: 1rem;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .back-link:hover {
+            color: var(--primary-color);
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
         }
 
-        .label {
-            font-weight: bold;
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
             text-align: left;
+            margin-top: 1rem;
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #f9fafb;
+            padding: 0.75rem 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: #007bff;
-            font-weight: bold;
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--text-main);
+        }
+
+        .badge {
+            display: inline-flex;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
         }
     </style>
 </head>
 
 <body>
 
-    <a href="/admin/usuarios" class="back-link">← Volver a Lista de Usuarios</a>
-
-    <h1>Detalles del Usuario: <span th:text="${usuario.email}">email</span></h1>
-
-    <!-- User Info -->
-    <div class="section">
-        <h2>Información Personal</h2>
-        <div class="info-grid">
-            <div><span class="label">ID:</span> <span th:text="${usuario.id}">1</span></div>
-            <div><span class="label">Rol:</span> <span th:text="${usuario.rol}">USER</span></div>
-            <div><span class="label">Nombre:</span> <span
-                    th:text="${usuario.perfil != null ? usuario.perfil.nombre : '-'}">Nom</span></div>
-            <div><span class="label">Apellido:</span> <span
-                    th:text="${usuario.perfil != null ? usuario.perfil.apellido : '-'}">Ape</span></div>
-            <div><span class="label">País:</span> <span
-                    th:text="${usuario.perfil != null ? usuario.perfil.pais : '-'}">ES</span></div>
-            <div><span class="label">Teléfono:</span> <span
-                    th:text="${usuario.perfil != null ? usuario.perfil.telefono : '-'}">123</span></div>
+    <div class="container">
+        <div class="header">
+            <a href="/admin/usuarios" class="back-link">
+                &larr; Volver
+            </a>
+            <h1>Detalles de Usuario</h1>
         </div>
-    </div>
 
-    <!-- Subscription Info -->
-    <div class="section">
-        <h2>Suscripción Actual</h2>
-        <div th:if="${suscripcion != null}">
-            <div class="info-grid">
-                <div><span class="label">Plan:</span> <span th:text="${suscripcion.plan.nombre}">Basic</span></div>
-                <div><span class="label">Precio:</span> <span th:text="${suscripcion.plan.precioMensual} + ' €'">9.99
-                        €</span></div>
-                <div><span class="label">Estado:</span> <span th:text="${suscripcion.estado}">ACTIVA</span></div>
-                <div><span class="label">Inicio:</span> <span th:text="${suscripcion.fechaInicio}">2026-01-01</span>
+        <!-- User Profile Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Información Personal</div>
+                <span class="badge badge-success" th:if="${usuario.rol == 'ROLE_ADMIN'}">Admin</span>
+                <span class="badge badge-warning" th:unless="${usuario.rol == 'ROLE_ADMIN'}">Usuario</span>
+            </div>
+            <div class="grid">
+                <div class="info-item">
+                    <span class="info-label">ID</span>
+                    <span class="info-value" th:text="${usuario.id}">#1</span>
                 </div>
-                <div><span class="label">Fin / Renovación:</span> <span
-                        th:text="${suscripcion.fechaFin}">2026-02-01</span></div>
-                <div>
-                    <span class="label">Estado Pago:</span>
-                    <span
-                        th:if="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
-                        style="color: green; font-weight: bold;">PAGADO</span>
-                    <span
-                        th:unless="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
-                        style="color: red; font-weight: bold;">PENDIENTE</span>
+                <div class="info-item">
+                    <span class="info-label">Email</span>
+                    <span class="info-value" th:text="${usuario.email}">user@example.com</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Nombre Completo</span>
+                    <span class="info-value"
+                        th:text="${usuario.perfil != null ? (usuario.perfil.nombre + ' ' + usuario.perfil.apellido) : '-'}">Nombre
+                        Apellido</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">País</span>
+                    <span class="info-value"
+                        th:text="${usuario.perfil != null ? usuario.perfil.pais : '-'}">España</span>
                 </div>
             </div>
         </div>
-        <div th:unless="${suscripcion != null}">
-            <p style="color: grey; font-style: italic;">Este usuario no tiene ninguna suscripción activa.</p>
+
+        <!-- Current Subscription Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Suscripción Actual</div>
+            </div>
+            <div th:if="${suscripcion != null}" class="grid">
+                <div class="info-item">
+                    <span class="info-label">Plan</span>
+                    <span class="info-value" th:text="${suscripcion.plan.nombre}">Premium</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Estado</span>
+                    <span class="info-value">
+                        <span
+                            th:class="'badge ' + (${suscripcion.estado.name() == 'ACTIVA'} ? 'badge-success' : (${suscripcion.estado.name() == 'MOROSA'} ? 'badge-danger' : 'badge-warning'))"
+                            th:text="${suscripcion.estado}">ACTIVA</span>
+                    </span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Fecha Inicio</span>
+                    <span class="info-value" th:text="${suscripcion.fechaInicio}">2026-01-01</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Fecha Fin / Renovación</span>
+                    <span class="info-value" th:text="${suscripcion.fechaFin}">2026-02-01</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Pagado / Deuda</span>
+                    <span class="info-value">
+                        <span th:if="${suscripcion.estado.name() == 'MOROSA'}"
+                            style="color: var(--danger-color); font-weight: bold;">MOROSO (DEUDA)</span>
+                        <span th:unless="${suscripcion.estado.name() == 'MOROSA'}">
+                            <span
+                                th:if="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                                style="color: var(--success-color); font-weight: bold;">Pagado</span>
+                            <span
+                                th:unless="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                                style="color: var(--warning-color); font-weight: bold;">No Pagado / Vencido</span>
+                        </span>
+                    </span>
+                </div>
+            </div>
+            <div th:unless="${suscripcion != null}">
+                <p class="text-secondary" style="font-style: italic;">Sin suscripción activa.</p>
+            </div>
         </div>
-    </div>
 
-    <!-- Audit History -->
-    <div class="section">
-        <h2>Historial de Cambios (Auditoría)</h2>
-        <p>Historial de modificaciones para el usuario con ID: <strong th:text="${usuario.id}">1</strong></p>
+        <!-- Subscription History (Movimientos) -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Movimientos y Cambios de Suscripción</div>
+            </div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tipo Cambio</th>
+                            <th>Plan</th>
+                            <th>Estado</th>
+                            <th>Fecha Fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rev : ${suscripcionRevisions}">
+                            <!-- rev is now a Map object from the controller -->
+                            <td th:text="${#dates.format(rev.timestamp, 'dd/MM/yyyy HH:mm')}">
+                                01/01/2026 10:00</td>
+                            <td>
+                                <span th:text="${rev.tipo}">MOD</span>
+                                <span th:if="${rev.tipo.name() == 'ADD'}" class="badge badge-success"
+                                    style="font-size: 0.6em; margin-left: 5px;">Nuevo</span>
+                                <span th:if="${rev.tipo.name() == 'MOD'}" class="badge badge-warning"
+                                    style="font-size: 0.6em; margin-left: 5px;">Modificado</span>
+                                <span th:if="${rev.tipo.name() == 'DEL'}" class="badge badge-danger"
+                                    style="font-size: 0.6em; margin-left: 5px;">Eliminado</span>
+                            </td>
+                            <td th:text="${rev.planNombre}">Basic</td>
+                            <td th:text="${rev.estado}">ACTIVA</td>
+                            <td th:text="${rev.fechaFin}">2026-02-01</td>
+                        </tr>
+                        <tr th:if="${suscripcionRevisions == null or suscripcionRevisions.empty}">
+                            <td colspan="5" style="text-align: center; color: var(--text-secondary);">No hay movimientos
+                                registrados.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Rev ID</th>
-                    <th>Fecha</th>
-                    <th>Tipo</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="rev : ${revisions}">
-                    <td th:text="${rev[1].id}">10</td>
-                    <!-- Accessing DefaultRevisionEntity timestamp -->
-                    <td th:text="${#dates.format(new java.util.Date(rev[1].timestamp), 'dd/MM/yyyy HH:mm:ss')}">
-                        01/01/2026</td>
-                    <td th:text="${rev[2]}">MOD</td>
-                    <td th:text="${rev[0].email}">email</td>
-                    <td th:text="${rev[0].rol}">USER</td>
-                </tr>
-            </tbody>
-        </table>
+        <!-- User Audit History (Optional) -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Historial del Perfil</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="rev : ${revisions}">
+                        <td th:text="${#dates.format(new java.util.Date(rev[1].timestamp), 'dd/MM/yyyy HH:mm')}">
+                            01/01/2026</td>
+                        <td th:text="${rev[2]}">MOD</td>
+                        <td th:text="${rev[0].email}">email</td>
+                        <td th:text="${rev[0].rol}">USER</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 
 </body>

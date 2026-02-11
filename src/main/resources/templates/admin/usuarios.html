@@ -2,132 +2,403 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Gestión de Usuarios</title>
+    <title>Gestión de Usuarios | Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: sans-serif;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: white;
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger-outline {
+            background-color: transparent;
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .btn-danger-outline:hover {
+            background-color: #fef2f2;
+        }
+
+        /* Search Section */
+        .search-card {
+            background-color: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .form-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        .form-input,
+        .form-select {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            min-width: 200px;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Table Section */
+        .table-card {
+            background-color: var(--bg-card);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .table-container {
+            overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
             text-align: left;
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #f9fafb;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .btn-update {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
+        td {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.875rem;
+            color: var(--text-main);
+            vertical-align: middle;
         }
 
-        .btn-cancel {
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr {
             cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.625rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-danger {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .badge-neutral {
+            background-color: #f3f4f6;
+            color: #374151;
+        }
+
+        /* Utilities */
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-muted {
+            color: var(--text-secondary);
+        }
+
+        .font-medium {
+            font-weight: 500;
+        }
+
+        .ml-auto {
+            margin-left: auto;
+        }
+
+        /* Links in table should stop propagation if row is clickable, but simpler to just navigate */
+        a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Gestión de Usuarios</h1>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Usuarios</h1>
+                <p class="text-muted">Gestión de usuarios y suscripciones</p>
+            </div>
+            <div class="header-actions">
+                <a href="/admin/auditoria" class="btn btn-outline">Auditoría Global</a>
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger-outline">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
 
-    <div style="margin-bottom: 20px;">
-        <a href="/admin/auditoria">Ver Auditoría</a> |
-        <a href="/facturas">Ver Facturas (Demo)</a>
-        <form th:action="@{/logout}" method="post" style="display:inline; float:right;">
-            <button type="submit">Cerrar Sesión</button>
-        </form>
+        <!-- Search / Filter -->
+        <div class="search-card">
+            <form th:action="@{/admin/usuarios}" method="get" class="search-form">
+                <div class="form-group">
+                    <label class="form-label">Buscar Usuario</label>
+                    <input type="text" name="search" class="form-input" placeholder="Email..." th:value="${search}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Estado Pago</label>
+                    <select name="status" class="form-select">
+                        <option value="">Todos</option>
+                        <option value="PAGADO" th:selected="${status == 'PAGADO'}">Pagado</option>
+                        <option value="NO_PAGADO" th:selected="${status == 'NO_PAGADO'}">No Pagado</option>
+                        <option value="MOROSO" th:selected="${status == 'MOROSO'}">Moroso</option>
+                    </select>
+                </div>
+
+                <div style="margin-top: auto;">
+                    <button type="submit" class="btn btn-primary">Buscar</button>
+                    <a href="/admin/usuarios" class="btn btn-outline" style="margin-left: 0.5rem;">Limpiar</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-card">
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Usuario</th>
+                            <th>Rol</th>
+                            <th>País</th>
+                            <th>Plan</th>
+                            <th>Estado Suscripción</th>
+                            <th>Estado Pago</th>
+                            <th style="text-align: right;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="usuario : ${usuarios}"
+                            th:onclick="'window.location.href=\'/admin/usuarios/' + ${usuario.id} + '\''">
+                            <td class="text-muted" th:text="${usuario.id}">#1</td>
+                            <td>
+                                <div class="font-medium" th:text="${usuario.email}">user@example.com</div>
+                            </td>
+                            <td>
+                                <span class="badge badge-neutral" th:text="${usuario.rol}">USER</span>
+                            </td>
+                            <td th:text="${usuario.perfil != null ? usuario.perfil.pais : '-'}">ES</td>
+
+                            <!-- Subscription Logic -->
+                            <td
+                                th:text="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() ? usuario.suscripciones[0].plan.nombre : '-'}">
+                                Basic</td>
+
+                            <td>
+                                <span th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}"
+                                    th:with="sub=${usuario.suscripciones[0]}">
+                                    <span th:text="${sub.estado}">ACTIVA</span>
+                                </span>
+                                <span th:unless="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}"
+                                    class="text-muted">-</span>
+                            </td>
+
+                            <td>
+                                <span th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}"
+                                    th:with="sub=${usuario.suscripciones[0]}">
+                                    <span th:if="${sub.estado.name() == 'MOROSA'}"
+                                        class="badge badge-danger">MOROSO</span>
+                                    <span th:unless="${sub.estado.name() == 'MOROSA'}">
+                                        <span
+                                            th:if="${sub.fechaFin != null and sub.fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                                            class="badge badge-success">PAGADO</span>
+                                        <span
+                                            th:unless="${sub.fechaFin != null and sub.fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                                            class="badge badge-warning">NO PAGADO</span>
+                                    </span>
+                                </span>
+                                <span th:unless="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}"
+                                    class="badge badge-neutral">SIN SUSCRIPCIÓN</span>
+                            </td>
+
+                            <td style="text-align: right;" onclick="event.stopPropagation();">
+                                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                                    <!-- Delete Button Example (Only if user logic permits. Here only for MOROSOS per request) -->
+                                    <div
+                                        th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() and usuario.suscripciones[0].estado.name() == 'MOROSA'}">
+                                        <form th:action="@{/admin/usuarios/{id}/delete(id=${usuario.id})}" method="post"
+                                            onsubmit="return confirm('¿Eliminar usuario moroso? Esta acción es irreversible.');">
+                                            <button type="submit" class="btn btn-danger"
+                                                style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Eliminar</button>
+                                        </form>
+                                    </div>
+                                    <!-- Change Status Form (Optional per previous code logic) -->
+                                    <div th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">
+                                        <form th:action="@{/admin/usuarios/{id}/estado(id=${usuario.id})}"
+                                            method="post">
+                                            <select name="estado" onchange="this.form.submit()" class="form-select"
+                                                style="padding: 0.25rem; font-size: 0.75rem; min-width: auto;">
+                                                <option th:each="est : ${estados}" th:value="${est}" th:text="${est}"
+                                                    th:selected="${est == usuario.suscripciones[0].estado}">
+                                                    ACTIVA
+                                                </option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${usuarios.empty}">
+                            <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                                No se encontraron usuarios.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Email</th>
-                <th>Rol</th>
-                <th>País</th>
-                <th>Plan Actual</th>
-                <th>Estado Suscripción</th>
-                <th>Estado Pago</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="usuario : ${usuarios}">
-                <td><a th:href="@{/admin/usuarios/{id}(id=${usuario.id})}" th:text="${usuario.id}">1</a></td>
-                <td th:text="${usuario.email}">user@example.com</td>
-                <td th:text="${usuario.rol}">USER</td>
-                <td th:text="${usuario.perfil != null ? usuario.perfil.pais : 'N/A'}">ES</td>
-
-                <!-- Logic to find subscription for this user in the list (simplified for demo) -->
-                <!-- Ideally should be done in controller/service -->
-                <!-- We will use a helper or just iterate subscriptions in controller and pass a DTO -->
-
-                <!-- Quick fix for demo: we can just check if user has subscription via controller login
-                     But since we passed 'suscripciones', let's match them here or simplify. 
-                     Wait, AdminController logic was: findByUsuario(usuario).stream().findFirst()
-                     Let's verify logic in controller or Entity. 
-                     Usuario doesn't have OneToMany Suscripciones mappped yet in this conversation?
-                     Let's check Usuario.java next. If it doesn't, we can add it or doing a quick matching in view is hard.
-                     
-                     For now, let's assume we fix Usuario.java to have mappedBy list, OR we changed AdminController to pass a ViewModel.
-                     
-                     Let's Assume we will ADD the OneToMany to Usuario.java to make this easy.
-                -->
-
-                <td
-                    th:text="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() ? usuario.suscripciones[0].plan.nombre : 'Sin Plan'}">
-                    Basic</td>
-
-                <td
-                    th:text="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() ? usuario.suscripciones[0].estado : 'Sin Suscripción'}">
-                    ACTIVA</td>
-
-                <td>
-                    <span th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">
-                        <span
-                            th:if="${usuario.suscripciones[0].fechaFin != null and usuario.suscripciones[0].fechaFin.isAfter(T(java.time.LocalDate).now())}"
-                            style="color: green; font-weight: bold;">PAGADO</span>
-                        <span
-                            th:unless="${usuario.suscripciones[0].fechaFin != null and usuario.suscripciones[0].fechaFin.isAfter(T(java.time.LocalDate).now())}"
-                            style="color: red; font-weight: bold;">PENDIENTE</span>
-                    </span>
-                    <span th:unless="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">N/A</span>
-                </td>
-
-                <td>
-                    <div th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">
-                        <form th:action="@{/admin/usuarios/{id}/estado(id=${usuario.id})}" method="post">
-                            <select name="estado">
-                                <option th:each="est : ${estados}" th:value="${est}" th:text="${est}"
-                                    th:selected="${est == usuario.suscripciones[0].estado}">
-                                    ACTIVA
-                                </option>
-                            </select>
-                            <button type="submit" class="btn-update">Actualizar</button>
-                        </form>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 
 </body>
 

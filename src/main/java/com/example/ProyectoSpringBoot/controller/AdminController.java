@@ -29,29 +29,60 @@ public class AdminController {
     private SuscripcionRepository suscripcionRepository;
 
     @GetMapping("/usuarios")
-    public String listUsuarios(Model model) {
+    public String listUsuarios(@RequestParam(required = false) String search,
+            @RequestParam(required = false) String status,
+            Model model) {
         List<Usuario> usuarios = usuarioRepository.findAll();
-        // We might want to fetch subscriptions eagerly or just rely on lazy loading if
-        // transaction is open
-        // For simplicity in this demo, we'll just pass users andlet the view access
-        // subscriptions if mapped
-        // Ideally, we should pass a DTO or specific object, but let's stick to simple
-        // first.
 
-        // Better approach: Pass a list of DTOs or a structured object to avoid N+1 in
-        // view
-        // But for now, let's just pass users and ensure we can access their active
-        // subscription
+        // Search Filter (Email)
+        if (search != null && !search.isEmpty()) {
+            usuarios = usuarios.stream()
+                    .filter(u -> u.getEmail().toLowerCase().contains(search.toLowerCase()))
+                    .toList();
+        }
 
-        // To make it easier, let's fetch all subscriptions and put them in a map or
-        // just list them
-        List<Suscripcion> suscripciones = suscripcionRepository.findAll();
+        // Status Filter
+        if (status != null && !status.isEmpty()) {
+            java.time.LocalDate today = java.time.LocalDate.now();
+            usuarios = usuarios.stream().filter(u -> {
+                Suscripcion sub = u.getSuscripciones() != null && !u.getSuscripciones().isEmpty()
+                        ? u.getSuscripciones().get(0)
+                        : null;
+                boolean match = false;
+
+                if ("MOROSO".equals(status)) {
+                    match = sub != null && sub.getEstado() == EstadoSuscripcion.MOROSA;
+                } else if ("PAGADO".equals(status)) {
+                    match = sub != null && sub.getEstado() != EstadoSuscripcion.MOROSA && sub.getFechaFin() != null
+                            && !sub.getFechaFin().isBefore(today);
+                } else if ("NO_PAGADO".equals(status)) {
+                    match = sub == null || (sub.getEstado() != EstadoSuscripcion.MOROSA
+                            && (sub.getFechaFin() == null || sub.getFechaFin().isBefore(today)));
+                }
+                return match;
+            }).toList();
+        }
 
         model.addAttribute("usuarios", usuarios);
-        model.addAttribute("suscripciones", suscripciones); // We can filter in view or controller
         model.addAttribute("estados", EstadoSuscripcion.values());
+        model.addAttribute("search", search);
+        model.addAttribute("status", status);
 
         return "admin/usuarios";
+    }
+
+    @PostMapping("/usuarios/{id}/delete")
+    public String deleteUsuario(@PathVariable Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElseThrow();
+        Suscripcion sub = usuario.getSuscripciones() != null && !usuario.getSuscripciones().isEmpty()
+                ? usuario.getSuscripciones().get(0)
+                : null;
+
+        if (sub != null && sub.getEstado() == EstadoSuscripcion.MOROSA) {
+            usuarioRepository.delete(usuario);
+        }
+
+        return "redirect:/admin/usuarios";
     }
 
     @PostMapping("/usuarios/{id}/estado")
@@ -88,17 +119,72 @@ public class AdminController {
         AuditReader auditReader = AuditReaderFactory.get(entityManager);
 
         // Fetch user revisions
-        List<Object[]> userRevisions = auditReader.createQuery()
-                .forRevisionsOfEntity(Usuario.class, false, true)
-                .add(AuditEntity.id().eq(id))
-                .getResultList();
+        List<Object[]> userRevisions = new java.util.ArrayList<>();
+        try {
+            userRevisions = auditReader.createQuery()
+                    .forRevisionsOfEntity(Usuario.class, false, true)
+                    .add(AuditEntity.id().eq(id))
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error fetching user revisions for user " + id + ": " + e.getMessage());
+        }
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("revisions", userRevisions);
 
         // Also fetch subscription if exists
-        Suscripcion suscripcion = suscripcionRepository.findByUsuario(usuario).stream().findFirst().orElse(null);
+        List<Suscripcion> suscripciones = suscripcionRepository.findByUsuario(usuario);
+        Suscripcion suscripcion = suscripciones.stream().findFirst().orElse(null);
         model.addAttribute("suscripcion", suscripcion);
+
+        // Fetch subscription revisions (Movimientos)
+        List<Object[]> rawRevisions = new java.util.ArrayList<>();
+        try {
+            rawRevisions = auditReader.createQuery()
+                    .forRevisionsOfEntity(Suscripcion.class, false, true)
+                    .add(AuditEntity.relatedId("usuario").eq(id))
+                    .getResultList();
+        } catch (Exception e) {
+            System.err.println("Error fetching subscription revisions for user " + id + ": " + e.getMessage());
+        }
+
+        // Process revisions to handle broken foreign keys (e.g. deleted Plans) safely
+        List<java.util.Map<String, Object>> processedRevisions = new java.util.ArrayList<>();
+        for (Object[] rev : rawRevisions) {
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            Suscripcion sub = (Suscripcion) rev[0];
+            Object revEntity = rev[1];
+            Object revType = rev[2];
+
+            // Timestamp
+            long timestamp = 0;
+            if (revEntity instanceof org.hibernate.envers.DefaultRevisionEntity) {
+                timestamp = ((org.hibernate.envers.DefaultRevisionEntity) revEntity).getTimestamp();
+            }
+            map.put("timestamp", new java.util.Date(timestamp));
+
+            // Revision Type
+            map.put("tipo", revType);
+
+            // Safe Plan Name Access
+            String planNombre = "-";
+            try {
+                if (sub.getPlan() != null) {
+                    planNombre = sub.getPlan().getNombre();
+                }
+            } catch (Exception e) {
+                // Determine if it's EntityNotFoundException or similar
+                planNombre = "Plan Eliminado";
+            }
+            map.put("planNombre", planNombre);
+
+            map.put("estado", sub.getEstado());
+            map.put("fechaFin", sub.getFechaFin());
+
+            processedRevisions.add(map);
+        }
+
+        model.addAttribute("suscripcionRevisions", processedRevisions);
 
         return "admin/usuario_detalle";
     }

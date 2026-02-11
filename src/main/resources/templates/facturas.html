@@ -2,107 +2,354 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Facturas</title>
+    <title>Mi Panel | SaaS Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-hover: #4338ca;
+            --danger-color: #ef4444;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --text-main: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 2rem;
         }
 
-        table {
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.625rem 1.25rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #059669;
+        }
+
+        .btn-outline {
+            background-color: white;
+            border-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .btn-danger-outline {
+            background-color: transparent;
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .btn-danger-outline:hover {
+            background-color: #fef2f2;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .card-header {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            letter-spacing: 0.05em;
+        }
+
+        .value {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+
+        .value-large {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.375rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .alert-warning {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .alert-info {
+            background-color: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-input,
+        .form-select {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+            padding: 0.625rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
         }
 
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .filter-form {
-            margin-bottom: 20px;
-            padding: 10px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-end;
         }
     </style>
 </head>
 
 <body>
 
-    <h1>Listado de Facturas</h1>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div>
+                <h1>Mi Panel</h1>
+                <p class="text-muted">Gestiona tu suscripción y cuenta</p>
+            </div>
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-danger-outline">Cerrar Sesión</button>
+            </form>
+        </div>
 
-    <!-- Feedback Messages -->
-    <div th:if="${param.paymentSuccess}"
-        style="margin-bottom: 20px; padding: 15px; border: 1px solid #28a745; background-color: #d4edda; color: #155724;">
-        Mensualidad pagada correctamente. Se ha extendido tu suscripción 30 días.
+        <!-- Feedback Messages -->
+        <div th:if="${param.paymentSuccess}" class="alert alert-success">
+            ✅ Mensualidad pagada correctamente. Se ha extendido tu suscripción 30 días.
+        </div>
+        <div th:if="${param.alreadyPaid}" class="alert alert-warning">
+            ⚠️ Tu mensualidad ya está pagada. Faltan <span th:text="${param.days}">X</span> días para el próximo pago.
+        </div>
+        <div th:if="${param.passwordChanged}" class="alert alert-info">
+            🔒 Contraseña actualizada correctamente.
+        </div>
+        <div th:if="${param.error}" class="alert alert-warning">
+            ❌ Ha ocurrido un error. Inténtalo de nuevo.
+        </div>
+
+        <!-- Subscription Card -->
+        <div class="card" th:if="${suscripcion != null}">
+            <div class="card-header">
+                <div class="card-title">Tu Suscripción</div>
+            </div>
+
+            <div class="grid-2">
+                <div class="grid-item">
+                    <span class="label">Plan Actual</span>
+                    <span class="value-large" th:text="${suscripcion.plan.nombre}">Premium</span>
+                    <span class="text-muted" th:text="${suscripcion.plan.descripcion}">Descripción del plan</span>
+                </div>
+                <div class="grid-item" style="align-items: flex-end; text-align: right;">
+                    <span class="label">Precio Mensual</span>
+                    <span class="value" th:text="${suscripcion.plan.precioMensual} + ' €/mes'">19.99 €/mes</span>
+                </div>
+            </div>
+
+            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+            <div class="grid-2">
+                <div class="grid-item">
+                    <span class="label">Recursos Incluidos</span>
+                    <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                        <div
+                            style="background: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem;">
+                            <strong>Webs:</strong> <span th:text="${suscripcion.plan.numWebs}">1</span>
+                        </div>
+                        <div
+                            style="background: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem;">
+                            <strong>Bases de Datos:</strong> <span th:text="${suscripcion.plan.numBasesDatos}">5</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+                        <strong>Características adicionales:</strong>
+                        <ul style="list-style-type: disc; margin-left: 1.5rem; margin-top: 0.5rem;">
+                            <li>Soporte técnico prioritario 24/7</li>
+                            <li>Copias de seguridad automáticas diarias</li>
+                            <li>Certificado SSL gratuito</li>
+                            <li th:if="${suscripcion.plan.nombre == 'ENTERPRISE'}">Gestor de cuenta dedicado</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="grid-item" style="align-items: flex-end;">
+                    <span class="label">Estado de Pago</span>
+                    <div style="margin-top: 0.5rem;">
+                        <span
+                            th:if="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                            style="color: var(--success-color); font-weight: bold; display: flex; align-items: center; gap: 0.25rem;">
+                            ✅ Pagado (Vence: <span th:text="${suscripcion.fechaFin}"></span>)
+                        </span>
+                        <span
+                            th:unless="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
+                            style="color: var(--warning-color); font-weight: bold; display: flex; align-items: center; gap: 0.25rem;">
+                            ⚠️ Pendiente de Pago
+                        </span>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <form th:action="@{/facturas/pagar}" method="post" style="margin-top: 1rem;">
+                        <button type="submit" class="btn btn-success">
+                            Pagar Mensualidad
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+
+            <!-- Change Plan -->
+            <div>
+                <span class="label" style="display: block; margin-bottom: 0.5rem;">Cambiar de Plan</span>
+                <form th:action="@{/facturas/cambiar-plan}" method="post" class="form-row">
+                    <div style="flex-grow: 1;">
+                        <select name="planId" id="planId" class="form-select">
+                            <option th:each="plan : ${planes}" th:value="${plan.id}"
+                                th:text="${plan.nombre} + ' (' + ${plan.precioMensual} + '€)'"
+                                th:selected="${plan.id == suscripcion.plan.id}">
+                                Premium (19.99€)
+                            </option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-outline"
+                        onclick="return confirm('¿Seguro que quieres cambiar de plan?')">Actualizar Plan</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card" th:unless="${suscripcion != null}">
+            <div style="text-align: center; padding: 2rem;">
+                <h3 style="margin-bottom: 1rem;">No tienes una suscripción activa</h3>
+                <a href="/pricing" class="btn btn-primary">Ver Planes</a>
+            </div>
+        </div>
+
+        <!-- Account Settings Card -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Configuración de Cuenta</div>
+            </div>
+
+            <form th:action="@{/facturas/cambiar-password}" method="post">
+                <div class="form-group">
+                    <label class="label">Cambiar Contraseña</label>
+                    <div class="form-row">
+                        <input type="password" name="newPassword" class="form-input" placeholder="Nueva contraseña"
+                            required>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
     </div>
-
-    <div th:if="${param.alreadyPaid}"
-        style="margin-bottom: 20px; padding: 15px; border: 1px solid #ffc107; background-color: #fff3cd; color: #856404;">
-        Tu mensualidad ya está pagada. Faltan <span th:text="${param.days}">X</span> días para el próximo pago.
-    </div>
-
-    <div th:if="${param.passwordChanged}"
-        style="margin-bottom: 20px; padding: 15px; border: 1px solid #17a2b8; background-color: #d1ecf1; color: #0c5460;">
-        Contraseña actualizada correctamente.
-    </div>
-
-    <div th:if="${suscripcion != null}"
-        style="margin-bottom: 20px; padding: 15px; border: 1px solid #007bff; background-color: #e9f5ff;">
-        <h2>Tu Plan Actual</h2>
-        <p><strong>Plan:</strong> <span th:text="${suscripcion.plan.nombre}">Basic</span></p>
-        <p><strong>Precio:</strong> <span th:text="${suscripcion.plan.precioMensual}">9.99</span> €/mes</p>
-        <p><strong>Descripción:</strong> <span th:text="${suscripcion.plan.descripcion}">Desc</span></p>
-        <p><strong>Webs:</strong> <span th:text="${suscripcion.plan.numWebs}">1</span> | <strong>Bases de
-                Datos:</strong> <span th:text="${suscripcion.plan.numBasesDatos}">5</span></p>
-
-        <form th:action="@{/facturas/cambiar-plan}" method="post" style="margin-top: 10px;">
-            <label for="planId">Cambiar a:</label>
-            <select name="planId" id="planId">
-                <option th:each="plan : ${planes}" th:value="${plan.id}"
-                    th:text="${plan.nombre} + ' (' + ${plan.precioMensual} + '€)'"
-                    th:selected="${plan.id == suscripcion.plan.id}">
-                    Premium (19.99€)
-                </option>
-            </select>
-            <button type="submit" onclick="return confirm('¿Seguro que quieres cambiar de plan?')">Cambiar Plan</button>
-        </form>
-    </div>
-
-    <div style="margin-top: 20px; padding: 15px; border: 1px solid #28a745; background-color: #d4edda;">
-        <h3>Gestión de Cuenta</h3>
-
-        <form th:action="@{/facturas/pagar}" method="post" style="display:inline-block; margin-right: 20px;">
-            <button type="submit" class="btn-pay"
-                style="background-color: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer;">Pagar
-                Mensualidad</button>
-        </form>
-
-        <br><br>
-
-        <h4>Cambiar Contraseña</h4>
-        <form th:action="@{/facturas/cambiar-password}" method="post">
-            <label>Nueva Contraseña: <input type="password" name="newPassword" required></label>
-            <button type="submit">Actualizar</button>
-        </form>
-    </div>
-
-    <!-- 
-    <div class="filter-form">
-       (Filters removed as table is removed)
-    </div>
-    
-    <table>
-       (Table removed as requested)
-    </table> 
-    -->
 
 </body>
 

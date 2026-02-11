@@ -48,7 +48,7 @@ public class SecurityConfig {
             String redirectUrl = "/facturas";
 
             if (authorities.stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"))) {
-                redirectUrl = "/admin/auditoria";
+                redirectUrl = "/admin/usuarios";
             }
 
             response.sendRedirect(redirectUrl);
