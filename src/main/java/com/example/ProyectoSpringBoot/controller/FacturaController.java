@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+import com.example.ProyectoSpringBoot.dto.PlanWithTaxDTO;
+import com.example.ProyectoSpringBoot.service.TaxService;
 
 @Controller
 @RequestMapping("/facturas")
@@ -29,6 +32,9 @@ public class FacturaController {
     @Autowired
     private PlanRepository planRepository;
 
+    @Autowired
+    private TaxService taxService;
+
     @GetMapping
     public String listFacturas(
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
@@ -40,12 +46,46 @@ public class FacturaController {
         // User Logic
         String email = authentication.getName();
         Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+        String country = "Spain"; // Default
 
         if (usuario != null) {
+            String userName = usuario.getEmail(); // Default fallback
+            if (usuario.getPerfil() != null) {
+                if (usuario.getPerfil().getPais() != null) {
+                    country = usuario.getPerfil().getPais();
+                }
+                if (usuario.getPerfil().getNombre() != null) {
+                    userName = usuario.getPerfil().getNombre();
+                    if (usuario.getPerfil().getApellido() != null) {
+                        userName += " " + usuario.getPerfil().getApellido();
+                    }
+                }
+            }
+            model.addAttribute("userName", userName);
+            model.addAttribute("userEmail", usuario.getEmail());
+
             Suscripcion suscripcion = suscripcionRepository.findByUsuarioAndEstado(usuario, EstadoSuscripcion.ACTIVA)
                     .orElse(null);
             model.addAttribute("suscripcion", suscripcion);
-            model.addAttribute("planes", planRepository.findAll());
+
+            if (suscripcion != null) {
+                BigDecimal taxAmount = taxService.calculateTax(suscripcion.getPlan().getPrecioMensual(), country);
+                BigDecimal totalWithTax = taxService.calculateTotalWithTax(suscripcion.getPlan().getPrecioMensual(),
+                        country);
+                model.addAttribute("currentTaxAmount", taxAmount);
+                model.addAttribute("currentTotal", totalWithTax);
+            }
+
+            String finalCountry = country;
+            List<PlanWithTaxDTO> planesDTO = planRepository.findAll().stream().map(p -> {
+                BigDecimal taxRate = taxService.getTaxRate(finalCountry);
+                BigDecimal tAmount = taxService.calculateTax(p.getPrecioMensual(), finalCountry);
+                BigDecimal total = taxService.calculateTotalWithTax(p.getPrecioMensual(), finalCountry);
+                return new PlanWithTaxDTO(p, taxRate, tAmount, total);
+            }).collect(Collectors.toList());
+
+            model.addAttribute("planes", planesDTO);
+            model.addAttribute("userCountry", country);
         }
 
         List<Factura> facturas;

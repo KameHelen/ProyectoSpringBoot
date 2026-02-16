@@ -74,18 +74,22 @@
 
     <div class="pricing-container">
         <div th:each="plan : ${planes}" class="plan-card">
-            <h2 th:text="${plan.nombre}">Basic</h2>
-            <div class="price" th:text="${plan.precioMensual} + '€ / mes'">9.99€ / mes</div>
-            <p th:text="${plan.descripcion}">Descripción del plan</p>
+            <h2 th:text="${plan.plan.nombre}">Basic</h2>
+            <div class="price" th:text="${plan.totalPrice} + '€ / mes'">12.09€ / mes</div>
+            <div style="font-size: 0.8em; color: gray; margin-bottom: 10px;">
+                <span th:text="'Base: ' + ${plan.plan.precioMensual} + '€'">Base: 9.99€</span> +
+                <span th:text="'Impuestos: ' + ${plan.taxAmount} + '€'">Impuestos: 2.10€</span>
+            </div>
+            <p th:text="${plan.plan.descripcion}">Descripción del plan</p>
 
             <ul class="features">
-                <li>🌐 <span th:text="${plan.numWebs}">1</span> Sitios Web</li>
-                <li>💾 <span th:text="${plan.numBasesDatos}">5</span> Bases de Datos</li>
+                <li>🌐 <span th:text="${plan.plan.numWebs}">1</span> Sitios Web</li>
+                <li>💾 <span th:text="${plan.plan.numBasesDatos}">5</span> Bases de Datos</li>
                 <li>✅ Soporte 24/7</li>
             </ul>
 
             <form th:action="@{/pricing/select}" method="post">
-                <input type="hidden" name="planId" th:value="${plan.id}">
+                <input type="hidden" name="planId" th:value="${plan.plan.id}">
                 <button type="submit">Seleccionar Plan</button>
             </form>
         </div>

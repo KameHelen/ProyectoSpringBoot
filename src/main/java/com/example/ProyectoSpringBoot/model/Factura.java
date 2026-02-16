@@ -39,6 +39,7 @@ public class Factura {
 
     public void setSuscripcion(Suscripcion suscripcion) {
         this.suscripcion = suscripcion;
+
     }
 
     public TipoPago getTipoPago() {

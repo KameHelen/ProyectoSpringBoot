@@ -215,7 +215,8 @@
         <div class="header">
             <div>
                 <h1>Mi Panel</h1>
-                <p class="text-muted">Gestiona tu suscripción y cuenta</p>
+                <p class="text-muted">Hola, <span th:text="${userName}">Usuario</span>. Gestiona tu suscripción y cuenta
+                </p>
             </div>
             <form th:action="@{/logout}" method="post">
                 <button type="submit" class="btn btn-danger-outline">Cerrar Sesión</button>
@@ -249,8 +250,10 @@
                     <span class="text-muted" th:text="${suscripcion.plan.descripcion}">Descripción del plan</span>
                 </div>
                 <div class="grid-item" style="align-items: flex-end; text-align: right;">
-                    <span class="label">Precio Mensual</span>
-                    <span class="value" th:text="${suscripcion.plan.precioMensual} + ' €/mes'">19.99 €/mes</span>
+                    <span class="label">Precio Total</span>
+                    <span class="value" th:text="${currentTotal} + ' €/mes'">19.99 €/mes</span>
+                    <span class="text-muted" style="font-size: 0.8em;"
+                        th:text="'(Base: ' + ${suscripcion.plan.precioMensual} + '€ + Impuestos: ' + ${currentTaxAmount} + '€)'"></span>
                 </div>
             </div>
 
@@ -311,9 +314,9 @@
                 <form th:action="@{/facturas/cambiar-plan}" method="post" class="form-row">
                     <div style="flex-grow: 1;">
                         <select name="planId" id="planId" class="form-select">
-                            <option th:each="plan : ${planes}" th:value="${plan.id}"
-                                th:text="${plan.nombre} + ' (' + ${plan.precioMensual} + '€)'"
-                                th:selected="${plan.id == suscripcion.plan.id}">
+                            <option th:each="plan : ${planes}" th:value="${plan.plan.id}"
+                                th:text="${plan.plan.nombre} + ' (' + ${plan.totalPrice} + '€)'"
+                                th:selected="${plan.plan.id == suscripcion.plan.id}">
                                 Premium (19.99€)
                             </option>
                         </select>
@@ -340,6 +343,9 @@
             <form th:action="@{/facturas/cambiar-password}" method="post">
                 <div class="form-group">
                     <label class="label">Cambiar Contraseña</label>
+                    <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #6b7280;">
+                        Cuenta: <strong th:text="${userEmail}">usuario@email.com</strong>
+                    </p>
                     <div class="form-row">
                         <input type="password" name="newPassword" class="form-input" placeholder="Nueva contraseña"
                             required>
