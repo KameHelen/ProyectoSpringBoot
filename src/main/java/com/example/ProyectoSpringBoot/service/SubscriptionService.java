@@ -24,7 +24,7 @@ public class SubscriptionService {
     @Autowired
     private TaxService taxService;
 
-    @Scheduled(cron = "0 0 0 * * ?") // Runs daily at midnight
+    @Scheduled(cron = "0 0 0 * * ?") // Se ejecuta diariamente a medianoche
     @Transactional
     public void renewSubscriptions() {
         LocalDate today = LocalDate.now();
@@ -37,9 +37,9 @@ public class SubscriptionService {
     }
 
     private void renewSubscription(Suscripcion sub) {
-        // Calculate amount
+        // Calcular monto
         BigDecimal planPrice = sub.getPlan().getPrecioMensual();
-        String country = "ES"; // Default to Spain
+        String country = "ES"; // Por defecto España
         if (sub.getUsuario() != null && sub.getUsuario().getPerfil() != null
                 && sub.getUsuario().getPerfil().getPais() != null) {
             country = sub.getUsuario().getPerfil().getPais();
@@ -47,7 +47,7 @@ public class SubscriptionService {
 
         BigDecimal totalAmount = taxService.calculateTotalWithTax(planPrice, country);
 
-        // Create Invoice
+        // Crear Factura
         Factura factura = new Factura();
         factura.setSuscripcion(sub);
         factura.setFechaEmision(LocalDate.now());
@@ -58,7 +58,7 @@ public class SubscriptionService {
 
         facturaRepository.save(factura);
 
-        // Extend Subscription
+        // Extender Suscripción
         sub.setFechaFin(sub.getFechaFin().plusMonths(1));
         suscripcionRepository.save(sub);
 

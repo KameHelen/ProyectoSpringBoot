@@ -2,210 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Panel | SaaS Platform</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --danger-color: #ef4444;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --text-main: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-body: #f3f4f6;
-            --bg-card: #ffffff;
-            --border-color: #e5e7eb;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.5;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.625rem 1.25rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #059669;
-        }
-
-        .btn-outline {
-            background-color: white;
-            border-color: var(--border-color);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
-        }
-
-        .btn-danger-outline {
-            background-color: transparent;
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-        }
-
-        .btn-danger-outline:hover {
-            background-color: #fef2f2;
-        }
-
-        /* Cards */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .card-header {
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        /* Grid Layout */
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .grid-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            letter-spacing: 0.05em;
-        }
-
-        .value {
-            font-size: 1.125rem;
-            font-weight: 500;
-        }
-
-        .value-large {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        /* Alerts */
-        .alert {
-            padding: 1rem;
-            border-radius: 0.375rem;
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-        }
-
-        .alert-success {
-            background-color: #d1fae5;
-            color: #065f46;
-            border: 1px solid #a7f3d0;
-        }
-
-        .alert-warning {
-            background-color: #fef3c7;
-            color: #92400e;
-            border: 1px solid #fde68a;
-        }
-
-        .alert-info {
-            background-color: #dbeafe;
-            color: #1e40af;
-            border: 1px solid #bfdbfe;
-        }
-
-        /* Forms */
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-input,
-        .form-select {
-            width: 100%;
-            padding: 0.625rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-
-        .form-row {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-end;
-        }
-    </style>
 </head>
 
 <body>
@@ -257,18 +60,18 @@
                 </div>
             </div>
 
-            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border);">
 
             <div class="grid-2">
                 <div class="grid-item">
                     <span class="label">Recursos Incluidos</span>
                     <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
                         <div
-                            style="background: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem;">
+                            style="background: var(--bg-primary); padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem; border: 1px solid var(--border);">
                             <strong>Webs:</strong> <span th:text="${suscripcion.plan.numWebs}">1</span>
                         </div>
                         <div
-                            style="background: #f3f4f6; padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem;">
+                            style="background: var(--bg-primary); padding: 0.5rem 1rem; border-radius: 0.25rem; font-size: 0.875rem; border: 1px solid var(--border);">
                             <strong>Bases de Datos:</strong> <span th:text="${suscripcion.plan.numBasesDatos}">5</span>
                         </div>
                     </div>
@@ -287,12 +90,12 @@
                     <div style="margin-top: 0.5rem;">
                         <span
                             th:if="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
-                            style="color: var(--success-color); font-weight: bold; display: flex; align-items: center; gap: 0.25rem;">
+                            style="color: var(--success); font-weight: bold; display: flex; align-items: center; gap: 0.25rem;">
                             ✅ Pagado (Vence: <span th:text="${suscripcion.fechaFin}"></span>)
                         </span>
                         <span
                             th:unless="${suscripcion.fechaFin != null and suscripcion.fechaFin.isAfter(T(java.time.LocalDate).now())}"
-                            style="color: var(--warning-color); font-weight: bold; display: flex; align-items: center; gap: 0.25rem;">
+                            style="color: var(--warning); font-weight: bold; display: flex; align-items: center; gap: 0.25rem;">
                             ⚠️ Pendiente de Pago
                         </span>
                     </div>
@@ -306,7 +109,7 @@
                 </div>
             </div>
 
-            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border-color);">
+            <hr style="margin: 1.5rem 0; border: 0; border-top: 1px solid var(--border);">
 
             <!-- Change Plan -->
             <div>
@@ -341,9 +144,9 @@
             </div>
 
             <form th:action="@{/facturas/cambiar-password}" method="post">
-                <div class="form-group">
+                <div class="form-group" style="margin-bottom: 1rem;">
                     <label class="label">Cambiar Contraseña</label>
-                    <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: #6b7280;">
+                    <p style="margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--text-secondary);">
                         Cuenta: <strong th:text="${userEmail}">usuario@email.com</strong>
                     </p>
                     <div class="form-row">

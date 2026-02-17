@@ -2,96 +2,59 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Elige tu Plan</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f8f9fa;
-        }
-
-        .pricing-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .plan-card {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            width: 250px;
-            background: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-
-        .plan-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .price {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-        }
-
-        .features {
-            list-style: none;
-            padding: 0;
-            text-align: left;
-            margin: 20px 0;
-        }
-
-        .features li {
-            padding: 5px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        button {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elige tu Plan - Proyecto SpringBoot</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <h1>Selecciona tu Plan</h1>
-    <p>Elige el plan que mejor se adapte a tus necesidades para comenzar.</p>
+    <div class="container">
+        <h1>Selecciona tu Plan</h1>
+        <p style="text-align: center; max-width: 600px; margin: 0 auto 2rem auto;">
+            Elige el plan que mejor se adapte a tus necesidades para comenzar. Escala tu negocio con nuestra
+            infraestructura premium.
+        </p>
 
-    <div class="pricing-container">
-        <div th:each="plan : ${planes}" class="plan-card">
-            <h2 th:text="${plan.plan.nombre}">Basic</h2>
-            <div class="price" th:text="${plan.totalPrice} + '€ / mes'">12.09€ / mes</div>
-            <div style="font-size: 0.8em; color: gray; margin-bottom: 10px;">
-                <span th:text="'Base: ' + ${plan.plan.precioMensual} + '€'">Base: 9.99€</span> +
-                <span th:text="'Impuestos: ' + ${plan.taxAmount} + '€'">Impuestos: 2.10€</span>
+        <div class="pricing-grid">
+            <div th:each="plan : ${planes}" class="card pricing-card">
+                <h2 th:text="${plan.plan.nombre}" style="color: var(--accent); margin-bottom: 0;">Basic</h2>
+
+                <div class="price-tag">
+                    <span th:text="${plan.totalPrice}">12.09</span>€
+                    <span class="price-period">/ mes</span>
+                </div>
+
+                <div
+                    style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); padding-bottom: 1rem;">
+                    <span th:text="'Base: ' + ${plan.plan.precioMensual} + '€'">Base: 9.99€</span> +
+                    <span th:text="'Impuestos: ' + ${plan.taxAmount} + '€'">Impuestos: 2.10€</span>
+                </div>
+
+                <p th:text="${plan.plan.descripcion}" style="font-style: italic; margin-bottom: 1rem;">Descripción del
+                    plan</p>
+
+                <ul class="features-list">
+                    <li><strong th:text="${plan.plan.numWebs}">1</strong> Sitios Web</li>
+                    <li><strong th:text="${plan.plan.numBasesDatos}">5</strong> Bases de Datos</li>
+                    <li>Soporte 24/7</li>
+                    <li>Certificado SSL Gratuito</li>
+                    <li>Copias de seguridad diarias</li>
+                </ul>
+
+                <form th:action="@{/pricing/select}" method="post" style="margin-top: auto;">
+                    <input type="hidden" name="planId" th:value="${plan.plan.id}">
+                    <button type="submit" class="btn btn-primary">Seleccionar Plan</button>
+                </form>
             </div>
-            <p th:text="${plan.plan.descripcion}">Descripción del plan</p>
+        </div>
 
-            <ul class="features">
-                <li>🌐 <span th:text="${plan.plan.numWebs}">1</span> Sitios Web</li>
-                <li>💾 <span th:text="${plan.plan.numBasesDatos}">5</span> Bases de Datos</li>
-                <li>✅ Soporte 24/7</li>
-            </ul>
-
-            <form th:action="@{/pricing/select}" method="post">
-                <input type="hidden" name="planId" th:value="${plan.plan.id}">
-                <button type="submit">Seleccionar Plan</button>
-            </form>
+        <div style="text-align: center; margin-top: 3rem;">
+            <p>¿Tienes preguntas? <a href="#">Contacta con nosotros</a></p>
         </div>
     </div>
 

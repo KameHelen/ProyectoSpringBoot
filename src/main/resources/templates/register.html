@@ -2,99 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Registro</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f2f5;
-        }
-
-        .register-container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 350px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #218838;
-        }
-
-        .error {
-            color: red;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .login-link {
-            text-align: center;
-            margin-top: 15px;
-            display: block;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro - Proyecto SpringBoot</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <div class="register-container">
-        <h2>Crear Cuenta</h2>
-        <div th:if="${param.error}" class="error">
-            El email ya está registrado.
+    <div class="auth-container">
+        <div class="card auth-card">
+            <h2 style="text-align: center; color: var(--text-primary);">Crear Cuenta</h2>
+
+            <div th:if="${param.error}" class="error-msg">
+                El email ya está registrado.
+            </div>
+
+            <form th:action="@{/register}" method="post">
+                <!-- Usuario fields -->
+                <div style="margin-bottom: 1rem;">
+                    <input type="email" name="email" placeholder="Email" required aria-label="Email">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <input type="password" name="password" placeholder="Contraseña" required aria-label="Contraseña">
+                </div>
+
+                <!-- Perfil fields -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0;">
+                    <input type="text" name="nombre" placeholder="Nombre" required aria-label="Nombre">
+                    <input type="text" name="apellido" placeholder="Apellido" required aria-label="Apellido">
+                </div>
+
+                <input type="text" name="telefono" placeholder="Teléfono" required aria-label="Teléfono">
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label for="pais"
+                        style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">País
+                        (para impuestos):</label>
+                    <select name="pais" id="pais" required
+                        style="width: 100%; padding: 0.75rem 1rem; border-radius: 0.5rem; border: 1px solid var(--border); background-color: var(--bg-primary); color: var(--text-primary); font-size: 1rem;">
+                        <option value="ES">España (21% IVA)</option>
+                        <option value="PT">Portugal (23% IVA)</option>
+                        <option value="FR">Francia (20% IVA)</option>
+                        <option value="US">Estados Unidos (10% Tax)</option>
+                        <option value="OTHER">Otro (15% Tax)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Registrarse</button>
+            </form>
+
+            <div style="text-align: center; margin-top: 1.5rem;">
+                <p>¿Ya tienes cuenta? <a href="/login">Inicia Sesión</a></p>
+            </div>
         </div>
-
-        <form th:action="@{/register}" method="post">
-            <!-- Usuario fields -->
-            <input type="email" name="email" placeholder="Email" required>
-            <input type="password" name="password" placeholder="Contraseña" required>
-
-            <!-- Perfil fields -->
-            <input type="text" name="nombre" placeholder="Nombre" required>
-            <input type="text" name="apellido" placeholder="Apellido" required>
-            <input type="text" name="telefono" placeholder="Teléfono" required>
-
-            <label for="pais">País (para impuestos):</label>
-            <select name="pais" id="pais" required>
-                <option value="ES">España (21% IVA)</option>
-                <option value="PT">Portugal (23% IVA)</option>
-                <option value="FR">Francia (20% IVA)</option>
-                <option value="US">Estados Unidos (10% Tax)</option>
-                <option value="OTHER">Otro (15% Tax)</option>
-            </select>
-
-            <button type="submit">Registrarse</button>
-        </form>
-
-        <a href="/login" class="login-link">¿Ya tienes cuenta? Inicia Sesión</a>
     </div>
 
 </body>

@@ -21,7 +21,7 @@ public class TaxService {
         TAX_RATES.put("US", new BigDecimal("0.10"));
         TAX_RATES.put("EEUU", new BigDecimal("0.10"));
         TAX_RATES.put("USA", new BigDecimal("0.10"));
-        // Default
+        // Valor por defecto
         TAX_RATES.put("DEFAULT", new BigDecimal("0.21"));
     }
 
@@ -29,13 +29,13 @@ public class TaxService {
         if (country == null) {
             return TAX_RATES.get("DEFAULT");
         }
-        // Normalize maybe? For now exact match or default
-        // Try uppercase first
+        // ¿Normalizar quizás? Por ahora coincidencia exacta o defecto
+        // Probar mayúsculas primero
         String key = country.trim();
         if (TAX_RATES.containsKey(key)) {
             return TAX_RATES.get(key);
         }
-        // Case insensitive check
+        // Verificación insensible a mayúsculas/minúsculas
         for (String k : TAX_RATES.keySet()) {
             if (k.equalsIgnoreCase(key)) {
                 return TAX_RATES.get(k);
