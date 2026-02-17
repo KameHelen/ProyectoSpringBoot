@@ -199,6 +199,24 @@ button[type="submit"]:hover {
   background-color: rgba(239, 68, 68, 0.1);
 }
 
+.btn-danger {
+  background-color: var(--error);
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+  /* Darker red */
+  filter: brightness(1.1);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  width: auto;
+}
+
 /* Alertas */
 .alert {
   padding: 1rem;
@@ -281,7 +299,34 @@ button[type="submit"]:hover {
 .form-row {
   display: flex;
   gap: 1rem;
-  align-items: flex-end;
+  align-items: center;
+  /* Vertically center items */
+}
+
+/* Fix for inputs and buttons inside form-row */
+.form-row input,
+.form-row select,
+.form-row .form-input,
+.form-row .form-select {
+  margin-bottom: 0;
+  /* Remove bottom margin to align with button */
+  flex-grow: 1;
+  /* Input should take up remaining space */
+  width: auto;
+}
+
+.form-row button,
+.form-row .btn {
+  width: auto;
+  /* Button should size to content */
+  margin-bottom: 0;
+  white-space: nowrap;
+  /* Prevent button text wrapping */
+}
+
+/* Specific fix for the Select container in Change Plan form */
+.form-row>div[style*="flex-grow"] select {
+  margin-bottom: 0;
 }
 
 /* Específico Login/Registro */

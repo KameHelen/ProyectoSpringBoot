@@ -2,68 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Auditoría | Admin</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #4f46e5;
-            --text-main: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-body: #f3f4f6;
-            --bg-card: #ffffff;
-            --border-color: #e5e7eb;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .table-card {
-            background-color: var(--bg-card);
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
+        /* Table specific overrides not in global yet */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -71,20 +18,25 @@
         }
 
         th {
-            background-color: #f9fafb;
-            padding: 0.75rem 1rem;
+            background-color: var(--bg-primary);
+            /* Darker header */
+            padding: 1rem;
             font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
             color: var(--text-secondary);
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
         }
 
         td {
             padding: 1rem;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.875rem;
-            color: var(--text-main);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
         }
     </style>
 </head>
@@ -97,31 +49,35 @@
             <a href="/admin/usuarios" class="btn btn-primary">Ir a Gestión de Usuarios</a>
         </div>
 
-        <h2 style="font-size: 1.125rem; margin-bottom: 1rem;">Historial de Cambios en Usuarios</h2>
-        <div class="table-card">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Entidad (Email)</th>
-                        <th>Revisión</th>
-                        <th>Tipo Modificación</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="rev : ${usuarioRevisions}">
-                        <!-- rev is an array: [Entity, DefaultRevisionEntity, RevisionType] -->
-                        <td th:text="${rev[0].email}">user@example.com</td>
-                        <td
-                            th:text="${rev[1].id} + ' - ' + ${#dates.format(new java.util.Date(rev[1].timestamp), 'dd/MM/yyyy HH:mm:ss')}">
-                            Rev Info</td>
-                        <td th:text="${rev[2]}">MOD</td>
-                    </tr>
-                    <tr th:if="${usuarioRevisions.empty}">
-                        <td colspan="3" style="text-align: center; color: var(--text-secondary);">No hay registros de
-                            auditoría.</td>
-                    </tr>
-                </tbody>
-            </table>
+        <h2 style="font-size: 1.25rem; margin-bottom: 1rem; color: var(--text-primary);">Historial de Cambios en
+            Usuarios</h2>
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Entidad (Email)</th>
+                            <th>Revisión</th>
+                            <th>Tipo Modificación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="rev : ${usuarioRevisions}">
+                            <!-- rev is an array: [Entity, DefaultRevisionEntity, RevisionType] -->
+                            <td th:text="${rev[0].email}">user@example.com</td>
+                            <td
+                                th:text="${rev[1].id} + ' - ' + ${#dates.format(new java.util.Date(rev[1].timestamp), 'dd/MM/yyyy HH:mm:ss')}">
+                                Rev Info</td>
+                            <td th:text="${rev[2]}">MOD</td>
+                        </tr>
+                        <tr th:if="${usuarioRevisions.empty}">
+                            <td colspan="3" style="text-align: center; color: var(--text-secondary); padding: 2rem;">No
+                                hay registros de
+                                auditoría.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

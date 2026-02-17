@@ -184,6 +184,13 @@ public class AdminController {
             processedRevisions.add(map);
         }
 
+        // Sort by timestamp descending (newest first)
+        processedRevisions.sort((r1, r2) -> {
+            java.util.Date d1 = (java.util.Date) r1.get("timestamp");
+            java.util.Date d2 = (java.util.Date) r2.get("timestamp");
+            return d2.compareTo(d1);
+        });
+
         model.addAttribute("suscripcionRevisions", processedRevisions);
 
         return "admin/usuario_detalle";

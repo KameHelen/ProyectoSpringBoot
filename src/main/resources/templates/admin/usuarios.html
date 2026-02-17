@@ -2,206 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Usuarios | Admin Panel</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --danger-color: #ef4444;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --text-main: #1f2937;
-            --text-secondary: #6b7280;
-            --bg-body: #f3f4f6;
-            --bg-card: #ffffff;
-            --border-color: #e5e7eb;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            line-height: 1.5;
-            padding: 2rem;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.5rem 1rem;
-            border-radius: 0.375rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-outline {
-            background-color: white;
-            border-color: var(--border-color);
-            color: var(--text-main);
-        }
-
-        .btn-outline:hover {
-            background-color: #f9fafb;
-            border-color: #d1d5db;
-        }
-
-        .btn-danger {
-            background-color: var(--danger-color);
-            color: white;
-        }
-
-        .btn-danger-outline {
-            background-color: transparent;
-            border: 1px solid var(--danger-color);
-            color: var(--danger-color);
-        }
-
-        .btn-danger-outline:hover {
-            background-color: #fef2f2;
-        }
-
-        /* Search Section */
-        .search-card {
-            background-color: var(--bg-card);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            border: 1px solid var(--border-color);
-        }
-
-        .search-form {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .form-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            letter-spacing: 0.05em;
-        }
-
-        .form-input,
-        .form-select {
-            padding: 0.5rem 0.75rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.375rem;
-            font-size: 0.875rem;
-            min-width: 200px;
-            outline: none;
-        }
-
-        .form-input:focus,
-        .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-        }
-
-        /* Table Section */
-        .table-card {
-            background-color: var(--bg-card);
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            overflow: hidden;
-            border: 1px solid var(--border-color);
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f9fafb;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        td {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.875rem;
-            color: var(--text-main);
-            vertical-align: middle;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
-        }
-
-        tbody tr {
-            cursor: pointer;
-            transition: background-color 0.15s;
-        }
-
-        tbody tr:hover {
-            background-color: #f9fafb;
-        }
-
-        /* Status Badges */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -212,50 +20,53 @@
         }
 
         .badge-success {
-            background-color: #d1fae5;
-            color: #065f46;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
         }
 
         .badge-warning {
-            background-color: #fef3c7;
-            color: #92400e;
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
         }
 
         .badge-danger {
-            background-color: #fee2e2;
-            color: #b91c1c;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--error);
         }
 
         .badge-neutral {
-            background-color: #f3f4f6;
-            color: #374151;
-        }
-
-        /* Utilities */
-        .text-sm {
-            font-size: 0.875rem;
-        }
-
-        .text-muted {
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
         }
 
-        .font-medium {
-            font-weight: 500;
+        /* Table specific overrides */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
         }
 
-        .ml-auto {
-            margin-left: auto;
+        th {
+            background-color: var(--bg-primary);
+            padding: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
         }
 
-        /* Links in table should stop propagation if row is clickable, but simpler to just navigate */
-        a {
-            color: var(--primary-color);
-            text-decoration: none;
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+            color: var(--text-primary);
+            vertical-align: middle;
         }
 
-        a:hover {
-            text-decoration: underline;
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
         }
     </style>
 </head>
@@ -269,7 +80,7 @@
                 <h1>Usuarios</h1>
                 <p class="text-muted">Gestión de usuarios y suscripciones</p>
             </div>
-            <div class="header-actions">
+            <div style="display: flex; gap: 1rem;">
                 <a href="/admin/auditoria" class="btn btn-outline">Auditoría Global</a>
                 <form th:action="@{/logout}" method="post" style="display:inline;">
                     <button type="submit" class="btn btn-danger-outline">Cerrar Sesión</button>
@@ -278,16 +89,18 @@
         </div>
 
         <!-- Search / Filter -->
-        <div class="search-card">
-            <form th:action="@{/admin/usuarios}" method="get" class="search-form">
-                <div class="form-group">
-                    <label class="form-label">Buscar Usuario</label>
-                    <input type="text" name="search" class="form-input" placeholder="Email..." th:value="${search}">
+        <div class="card">
+            <form th:action="@{/admin/usuarios}" method="get" class="form-row"
+                style="flex-wrap: wrap; align-items: flex-end;">
+                <div class="grid-item" style="flex-grow: 1;">
+                    <label class="label">Buscar Usuario</label>
+                    <input type="text" name="search" placeholder="Email..." th:value="${search}"
+                        style="margin-bottom: 0;">
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Estado Pago</label>
-                    <select name="status" class="form-select">
+                <div class="grid-item" style="min-width: 200px;">
+                    <label class="label">Estado Pago</label>
+                    <select name="status" style="margin-bottom: 0;">
                         <option value="">Todos</option>
                         <option value="PAGADO" th:selected="${status == 'PAGADO'}">Pagado</option>
                         <option value="NO_PAGADO" th:selected="${status == 'NO_PAGADO'}">No Pagado</option>
@@ -295,16 +108,16 @@
                     </select>
                 </div>
 
-                <div style="margin-top: auto;">
-                    <button type="submit" class="btn btn-primary">Buscar</button>
-                    <a href="/admin/usuarios" class="btn btn-outline" style="margin-left: 0.5rem;">Limpiar</a>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn btn-primary" style="margin-bottom: 0;">Buscar</button>
+                    <a href="/admin/usuarios" class="btn btn-outline" style="margin-bottom: 0;">Limpiar</a>
                 </div>
             </form>
         </div>
 
         <!-- Users Table -->
-        <div class="table-card">
-            <div class="table-container">
+        <div class="card" style="padding: 0; overflow: hidden;">
+            <div style="overflow-x: auto;">
                 <table>
                     <thead>
                         <tr>
@@ -323,7 +136,7 @@
                             th:onclick="'window.location.href=\'/admin/usuarios/' + ${usuario.id} + '\''">
                             <td class="text-muted" th:text="${usuario.id}">#1</td>
                             <td>
-                                <div class="font-medium" th:text="${usuario.email}">user@example.com</div>
+                                <div style="font-weight: 500;" th:text="${usuario.email}">user@example.com</div>
                             </td>
                             <td>
                                 <span class="badge badge-neutral" th:text="${usuario.rol}">USER</span>
@@ -364,21 +177,20 @@
 
                             <td style="text-align: right;" onclick="event.stopPropagation();">
                                 <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-                                    <!-- Delete Button Example (Only if user logic permits. Here only for MOROSOS per request) -->
                                     <div
                                         th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty() and usuario.suscripciones[0].estado.name() == 'MOROSA'}">
                                         <form th:action="@{/admin/usuarios/{id}/delete(id=${usuario.id})}" method="post"
-                                            onsubmit="return confirm('¿Eliminar usuario moroso? Esta acción es irreversible.');">
-                                            <button type="submit" class="btn btn-danger"
-                                                style="padding: 0.25rem 0.5rem; font-size: 0.75rem;">Eliminar</button>
+                                            onsubmit="return confirm('¿Eliminar usuario moroso? Esta acción es irreversible.');"
+                                            style="margin-bottom: 0;">
+                                            <button type="submit" class="btn btn-danger btn-sm"
+                                                onclick="return confirm('¿Seguro que quieres eliminar este usuario?')">Eliminar</button>
                                         </form>
                                     </div>
-                                    <!-- Change Status Form (Optional per previous code logic) -->
                                     <div th:if="${usuario.suscripciones != null and !usuario.suscripciones.isEmpty()}">
-                                        <form th:action="@{/admin/usuarios/{id}/estado(id=${usuario.id})}"
-                                            method="post">
-                                            <select name="estado" onchange="this.form.submit()" class="form-select"
-                                                style="padding: 0.25rem; font-size: 0.75rem; min-width: auto;">
+                                        <form th:action="@{/admin/usuarios/{id}/estado(id=${usuario.id})}" method="post"
+                                            style="margin-bottom: 0;">
+                                            <select name="estado" onchange="this.form.submit()"
+                                                style="padding: 0.25rem; font-size: 0.75rem; min-width: auto; margin-bottom: 0; background-color: var(--bg-body); border-color: var(--border);">
                                                 <option th:each="est : ${estados}" th:value="${est}" th:text="${est}"
                                                     th:selected="${est == usuario.suscripciones[0].estado}">
                                                     ACTIVA
